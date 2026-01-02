@@ -333,16 +333,54 @@
         </div>
         
         <audio id="backgroundMusic" loop>
-            <source src="https://
+       <div id="youtubeMusic" style="display: none;">
+    <iframe 
+        width="0" 
+        height="0" 
+        src="https://www.youtube.com/embed/vGJTaP6anOU?autoplay=0&controls=0&loop=1&playlist=vGJTaP6anOU&enablejsapi=1" 
+        frameborder="0" 
+        allow="autoplay; encrypted-media" 
+        allowfullscreen>
+    </iframe>
+</div>
 
-assets.mixkit.co/music
 
-/preview/mixkit-can't-help
+<script>
+let youtubePlayer;
+let musicPlaying = false;
 
--falling-in-love-3 0 .mp3"
 
-type="audio/mpeg">
-        </audio>
+function onYouTubeIframeAPIReady() {
+    youtubePlayer = new YT.Player('youtubeMusic', {
+        events: {
+            'onReady': onPlayerReady
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    
+}
+
+function toggleMusic() {
+    if (!musicPlaying) {
+        
+        youtubePlayer.playVideo();
+        musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>Pause music';
+        musicPlaying = true;
+    } else {
+        
+        youtubePlayer.pauseVideo();
+        musicBtn.innerHTML = '<i class="fas fa-music"></i> Play Music';
+        musicPlaying = false;
+    }
+}
+
+
+const tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+document.body.appendChild(tag);
+</script>
     </div>
 
     <script>
