@@ -31,6 +31,7 @@
             width: 100%;
             text-align: center;
             position: relative;
+            z-index: 10;
         }
         
         h1 {
@@ -196,7 +197,7 @@
         }
         
         .instruction {
-            margin-top: 250px; /* Adjusted to account for opened letter */
+            margin-top: 250px;
             font-size: 1.2rem;
             color: #8a5568;
             font-style: italic;
@@ -204,7 +205,7 @@
         }
         
         .envelope.opened ~ .instruction {
-            margin-top: 350px; /* More space when letter is open */
+            margin-top: 350px;
         }
         
         .flowers {
@@ -227,6 +228,7 @@
             display: flex;
             gap: 20px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         
         button {
@@ -240,12 +242,59 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(232, 67, 147, 0.2);
+            min-width: 180px;
         }
         
         button:hover {
             background: #c44569;
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(232, 67, 147, 0.3);
+        }
+        
+        .music-controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #8a5568;
+        }
+        
+        .volume-slider {
+            width: 100px;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e84393;
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #c44569;
+            cursor: pointer;
+        }
+        
+        .now-playing {
+            margin-top: 15px;
+            font-size: 1rem;
+            color: #8a5568;
+            font-style: italic;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
         }
         
         .footer {
@@ -268,6 +317,17 @@
             animation: float 3s ease-in-out infinite;
         }
         
+        /* YouTube Player Container */
+        #youtube-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            opacity: 0;
+            z-index: 5;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 600px) {
             h1 { font-size: 2.5rem; }
@@ -288,6 +348,13 @@
             }
             .envelope.opened ~ .instruction {
                 margin-top: 280px;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            button {
+                min-width: 200px;
             }
         }
     </style>
@@ -325,63 +392,28 @@
         <div class="controls">
             <button id="openBtn"><i class="fas fa-envelope-open"></i> Open Letter</button>
             <button id="closeBtn"><i class="fas fa-envelope"></i> Close Letter</button>
-            <button id="musicBtn"><i class="fas fa-music"></i> Toggle Music</button>
+        </div>
+        
+        <div class="music-controls">
+            <button id="playBtn"><i class="fas fa-play"></i> Play Music</button>
+            <button id="pauseBtn"><i class="fas fa-pause"></i> Pause Music</button>
+            <div class="volume-control">
+                <i class="fas fa-volume-up"></i>
+                <input type="range" min="0" max="100" value="50" class="volume-slider" id="volumeSlider">
+            </div>
+        </div>
+        
+        <div class="now-playing" id="nowPlaying">
+            ♫ Ready to play: "Can't Help Falling In Love" - No Copyright Version ♫
         </div>
         
         <div class="footer">
             Made with <i class="fas fa-heart" style="color: #e84393;"></i> for someone special
         </div>
-        
-        <audio id="backgroundMusic" loop>
-       <div id="youtubeMusic" style="display: none;">
-    <iframe 
-        width="0" 
-        height="0" 
-        src="https://www.youtube.com/embed/vGJTaP6anOU?autoplay=0&controls=0&loop=1&playlist=vGJTaP6anOU&enablejsapi=1" 
-        frameborder="0" 
-        allow="autoplay; encrypted-media" 
-        allowfullscreen>
-    </iframe>
-</div>
-
-
-<script>
-let youtubePlayer;
-let musicPlaying = false;
-
-
-function onYouTubeIframeAPIReady() {
-    youtubePlayer = new YT.Player('youtubeMusic', {
-        events: {
-            'onReady': onPlayerReady
-        }
-    });
-}
-
-function onPlayerReady(event) {
-    
-}
-
-function toggleMusic() {
-    if (!musicPlaying) {
-        
-        youtubePlayer.playVideo();
-        musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>Pause music';
-        musicPlaying = true;
-    } else {
-        
-        youtubePlayer.pauseVideo();
-        musicBtn.innerHTML = '<i class="fas fa-music"></i> Play Music';
-        musicPlaying = false;
-    }
-}
-
-
-const tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-document.body.appendChild(tag);
-</script>
     </div>
+    
+    <!-- YouTube Player Container -->
+    <div id="youtube-player"></div>
 
     <script>
         // DOM elements
@@ -389,10 +421,20 @@ document.body.appendChild(tag);
         const envelopeContainer = document.getElementById('envelopeContainer');
         const openBtn = document.getElementById('openBtn');
         const closeBtn = document.getElementById('closeBtn');
-        const musicBtn = document.getElementById('musicBtn');
-        const backgroundMusic = document.getElementById('backgroundMusic');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const nowPlaying = document.getElementById('nowPlaying');
         const flowersContainer = document.getElementById('flowers');
         const instruction = document.getElementById('instruction');
+        
+        // YouTube Player variables
+        let player;
+        let musicPlaying = false;
+        
+        // NO COPYRIGHT YouTube video ID - Ukulele instrumental cover
+        // This is a royalty-free, no copyright version
+        const youtubeVideoId = '5Jh7jU_ECpQ'; // No copyright ukulele cover
         
         // Create floating flowers
         function createFlowers() {
@@ -441,35 +483,134 @@ document.body.appendChild(tag);
             instruction.textContent = "Click the envelope to open your love letter";
         }
         
-        // Toggle background music
-        let musicPlaying = false;
-        function toggleMusic() {
-            if (musicPlaying) {
-                backgroundMusic.pause();
-                musicBtn.innerHTML = '<i class="fas fa-music"></i> Play Music';
-            } else {
-                backgroundMusic.play().catch(e => {
-                    console.log("Autoplay prevented. Please click the button to play music.");
-                    // If autoplay is prevented, change button text
-                    musicBtn.innerHTML = '<i class="fas fa-music"></i> Click to Play';
-                });
-                musicBtn.innerHTML = '<i class="fas fa-volume-up"></i> Pause Music';
+        // Play YouTube Music
+        function playMusic() {
+            if (!player) {
+                alert("Music player is still loading. Please wait a moment...");
+                return;
             }
-            musicPlaying = !musicPlaying;
+            
+            player.playVideo();
+            musicPlaying = true;
+            nowPlaying.innerHTML = '♫ Now playing: "Can\'t Help Falling In Love" - Ukulele Cover ♫';
+            playBtn.disabled = true;
+            pauseBtn.disabled = false;
+        }
+        
+        // Pause YouTube Music
+        function pauseMusic() {
+            if (!player) return;
+            
+            player.pauseVideo();
+            musicPlaying = false;
+            nowPlaying.innerHTML = '♫ Music paused: "Can\'t Help Falling In Love" ♫';
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+        }
+        
+        // Update volume
+        function updateVolume() {
+            if (!player) return;
+            
+            const volume = volumeSlider.value;
+            player.setVolume(volume);
+            
+            // Update volume icon based on level
+            const volumeIcon = volumeSlider.previousElementSibling;
+            if (volume == 0) {
+                volumeIcon.className = 'fas fa-volume-mute';
+            } else if (volume < 50) {
+                volumeIcon.className = 'fas fa-volume-down';
+            } else {
+                volumeIcon.className = 'fas fa-volume-up';
+            }
+        }
+        
+        // YouTube API Functions
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: youtubeVideoId,
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'disablekb': 1,
+                    'fs': 0,
+                    'loop': 1,
+                    'modestbranding': 1,
+                    'playlist': youtubeVideoId,
+                    'rel': 0,
+                    'showinfo': 0,
+                    'iv_load_policy': 3
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError
+                }
+            });
+        }
+        
+        function onPlayerReady(event) {
+            console.log("YouTube player is ready");
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            
+            // Set initial volume
+            event.target.setVolume(50);
+            
+            // Update UI
+            nowPlaying.innerHTML = '♫ Ready: "Can\'t Help Falling In Love" - No Copyright Ukulele Cover ♫';
+        }
+        
+        function onPlayerStateChange(event) {
+            // If video ends, restart it (for looping)
+            if (event.data === YT.PlayerState.ENDED) {
+                event.target.playVideo();
+            }
+            
+            // Update button states based on player state
+            if (event.data === YT.PlayerState.PLAYING) {
+                musicPlaying = true;
+                playBtn.disabled = true;
+                pauseBtn.disabled = false;
+                nowPlaying.innerHTML = '♫ Now playing: "Can\'t Help Falling In Love" - Ukulele Cover ♫';
+            } else if (event.data === YT.PlayerState.PAUSED) {
+                musicPlaying = false;
+                playBtn.disabled = false;
+                pauseBtn.disabled = true;
+                nowPlaying.innerHTML = '♫ Music paused ♫';
+            }
+        }
+        
+        function onPlayerError(event) {
+            console.error("YouTube Player Error:", event.data);
+            nowPlaying.innerHTML = '♫ Error loading music. Please refresh the page. ♫';
+            nowPlaying.style.color = '#e74c3c';
         }
         
         // Event listeners
         envelopeContainer.addEventListener('click', openEnvelope);
         openBtn.addEventListener('click', openEnvelope);
         closeBtn.addEventListener('click', closeEnvelope);
-        musicBtn.addEventListener('click', toggleMusic);
+        playBtn.addEventListener('click', playMusic);
+        pauseBtn.addEventListener('click', pauseMusic);
+        volumeSlider.addEventListener('input', updateVolume);
         
         // Initialize
         createFlowers();
         
+        // Load YouTube API
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        
         // Add a romantic message in console
         console.log("%c💖 For someone special 💖", "color: #e84393; font-size: 18px; font-weight: bold;");
-        console.log("%cThis letter was created with love and code.", "color: #8a5568; font-size: 14px;");
+        console.log("%cNow playing: Can't Help Falling In Love (No Copyright Ukulele Cover)", "color: #8a5568; font-size: 14px;");
+        console.log("%cMusic Source: https://www.youtube.com/watch?v=5Jh7jU_ECpQ", "color: #7f8c8d; font-size: 12px;");
     </script>
 </body>
 </html>
