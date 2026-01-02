@@ -3,154 +3,427 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Misty ❤️</title>
+    <title>Love Letter for You</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --pink-light: #ffcad4;
-            --pink-main: #ff8fa3;
-            --pink-dark: #d81b60;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-
+        
         body {
-            background-color: #fff0f3;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, #f9d5e5 0%, #fef9ff 100%);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            justify-content: center;
+            color: #5d3a4a;
             padding: 20px;
             overflow-x: hidden;
         }
-
-        /* Container for the surprise */
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #c44569;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: #8a5568;
+            font-style: italic;
+        }
+        
         .envelope-container {
             position: relative;
-            margin-top: 100px;
-            cursor: pointer;
-            height: 250px;
-        }
-
-        .envelope {
-            position: relative;
-            width: 320px;
+            width: 300px;
             height: 200px;
-            background: var(--pink-main);
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            z-index: 2;
+            margin: 0 auto 50px;
+            cursor: pointer;
+            z-index: 10;
         }
-
-        /* Top Flap */
-        .envelope::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            z-index: 4;
-            border-left: 160px solid transparent;
-            border-right: 160px solid transparent;
-            border-top: 110px solid #ffb3c1;
-            transform-origin: top;
-            transition: all 0.5s ease;
-        }
-
-        /* The Card inside */
-        .letter {
-            position: absolute;
-            bottom: 5px;
-            left: 15px;
-            width: 290px;
-            background: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 10px;
-            transition: all 0.6s ease;
-            z-index: 3;
-            box-sizing: border-box;
-        }
-
-        .letter h1 { color: var(--pink-dark); margin: 0; font-size: 1.4rem; }
-        .letter p { color: #444; font-size: 0.95rem; line-height: 1.4; }
-
-        /* OPEN STATE ANIMATIONS */
-        .envelope-container.open .envelope::before {
-            transform: rotateX(180deg);
-            z-index: 1; /* Moves flap behind everything */
-        }
-
-        .envelope-container.open .letter {
-            transform: translateY(-130px);
-            z-index: 5; /* Brings letter to the very front */
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-        }
-
-        /* Photo Gallery Section */
-        .gallery {
-            margin-top: 150px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 600px;
-            opacity: 0;
-            transition: opacity 1s ease 0.5s;
-        }
-
-        .envelope-container.open ~ .gallery {
-            opacity: 1;
-        }
-
-        .photo-frame {
-            width: 150px;
-            height: 150px;
-            background: white;
-            padding: 8px;
-            border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transform: rotate(-3deg);
-        }
-
-        .photo-frame img {
+        
+        .envelope {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            position: relative;
+            transition: all 1.2s ease;
         }
-
-        .instruction {
+        
+        .envelope.opened {
+            transform: translateY(-100px);
+        }
+        
+        .envelope-body {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e84393 0%, #fd79a8 100%);
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(232, 67, 147, 0.3);
+            z-index: 1;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 3;
+            transform-origin: top;
+            transition: transform 0.8s ease 0.4s;
+        }
+        
+        .envelope-flap::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #ff6b8b;
+        }
+        
+        .envelope.opened .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        
+        .heart-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: #ff4757;
+            z-index: 4;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        .heart-seal:before, .heart-seal:after {
+            content: '';
+            width: 60px;
+            height: 60px;
+            background: #ff4757;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .heart-seal:before {
+            top: -30px;
+            left: 0;
+        }
+        
+        .heart-seal:after {
+            top: 0;
+            left: -30px;
+        }
+        
+        .letter-container {
+            position: absolute;
+            width: 280px;
+            height: 380px;
+            background: #fff9fb;
+            border-radius: 5px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100px;
+            z-index: 2;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.8s ease 0.6s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .envelope.opened .letter-container {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-20px);
+        }
+        
+        .letter {
+            width: 90%;
+            height: 90%;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .letter-content {
+            text-align: left;
+            line-height: 1.8;
+        }
+        
+        .letter-content h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: #c44569;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .letter-content p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #c44569;
             margin-top: 20px;
-            color: var(--pink-dark);
-            font-weight: bold;
-            animation: bounce 2s infinite;
+            text-align: right;
         }
-
-        @keyframes bounce {
+        
+        .instruction {
+            margin-top: 250px; /* Adjusted to account for opened letter */
+            font-size: 1.2rem;
+            color: #8a5568;
+            font-style: italic;
+            transition: margin-top 1s ease;
+        }
+        
+        .envelope.opened ~ .instruction {
+            margin-top: 350px; /* More space when letter is open */
+        }
+        
+        .flowers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .flower {
+            position: absolute;
+            font-size: 1.5rem;
+            color: #e84393;
+            opacity: 0.7;
+        }
+        
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        button {
+            background: #e84393;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(232, 67, 147, 0.2);
+        }
+        
+        button:hover {
+            background: #c44569;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(232, 67, 147, 0.3);
+        }
+        
+        .footer {
+            margin-top: 40px;
+            color: #8a5568;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .envelope-container {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .envelope-container { width: 250px; height: 166px; }
+            .envelope-flap::before {
+                border-left: 125px solid transparent;
+                border-right: 125px solid transparent;
+                border-top: 83px solid #ff6b8b;
+            }
+            .letter-container {
+                width: 230px;
+                height: 320px;
+            }
+            .letter { padding: 20px; }
+            .letter-content h2 { font-size: 1.8rem; }
+            .instruction {
+                margin-top: 200px;
+            }
+            .envelope.opened ~ .instruction {
+                margin-top: 280px;
+            }
         }
     </style>
 </head>
 <body>
-
-    <div class="envelope-container" onclick="this.classList.toggle('open')">
-        <div class="envelope">
-            <div class="letter">
-                <h1>Happy Birthday, Misty!</h1>
-                <p>You make every day brighter just by being you. I'm so lucky to have you.</p>
-                <p>❤️ <strong>Love you always!</strong></p>
+    <div class="container">
+        <h1>For My Dearest Love</h1>
+        <p class="subtitle">A special message just for you</p>
+        
+        <div class="flowers" id="flowers"></div>
+        
+        <div class="envelope-container" id="envelopeContainer">
+            <div class="envelope" id="envelope">
+                <div class="envelope-body"></div>
+                <div class="envelope-flap"></div>
+                <div class="heart-seal"></div>
+                <div class="letter-container">
+                    <div class="letter">
+                        <div class="letter-content">
+                            <h2>My Dearest Love,</h2>
+                            <p>From the moment our paths crossed, my life gained colors I never knew existed. Your smile brightens my darkest days, and your laughter is the sweetest melody to my ears.</p>
+                            <p>Every moment with you feels like a page from a beautiful story—one that I hope never ends. You've brought a love into my life that is deeper, purer, and more beautiful than anything I could have ever imagined.</p>
+                            <p>In your eyes, I've found my home. In your heart, I've found my peace. And in your love, I've found my forever.</p>
+                            <p>No matter where life takes us, please remember this: my love for you is constant, unwavering, and grows stronger with each passing day.</p>
+                            <p>Forever and always,</p>
+                            <div class="signature">Yours</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        
+        <p class="instruction" id="instruction">Click the envelope to open your love letter</p>
+        
+        <div class="controls">
+            <button id="openBtn"><i class="fas fa-envelope-open"></i> Open Letter</button>
+            <button id="closeBtn"><i class="fas fa-envelope"></i> Close Letter</button>
+            <button id="musicBtn"><i class="fas fa-music"></i> Toggle Music</button>
+        </div>
+        
+        <div class="footer">
+            Made with <i class="fas fa-heart" style="color: #e84393;"></i> for someone special
+        </div>
+        
+        <audio id="backgroundMusic" loop>
+            <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-687.mp3" type="audio/mpeg">
+        </audio>
     </div>
 
-    <div class="instruction">Click to open, Misty! 💌</div>
-
-    <div class="gallery">
-        <div class="photo-frame">
-            <img src="https://via.placeholder.com/150" alt="Misty Photo 1">
-        </div>
-        <div class="photo-frame" style="transform: rotate(3deg);">
-            <img src="https://via.placeholder.com/150" alt="Misty Photo 2">
-        </div>
-    </div>
-
+    <script>
+        // DOM elements
+        const envelope = document.getElementById('envelope');
+        const envelopeContainer = document.getElementById('envelopeContainer');
+        const openBtn = document.getElementById('openBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const musicBtn = document.getElementById('musicBtn');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const flowersContainer = document.getElementById('flowers');
+        const instruction = document.getElementById('instruction');
+        
+        // Create floating flowers
+        function createFlowers() {
+            const flowerIcons = ['🌸', '🌹', '💮', '🏵️', '🌺', '🌷', '🥀', '🌻'];
+            
+            for (let i = 0; i < 15; i++) {
+                const flower = document.createElement('div');
+                flower.classList.add('flower');
+                flower.innerHTML = flowerIcons[Math.floor(Math.random() * flowerIcons.length)];
+                
+                // Random position
+                flower.style.left = `${Math.random() * 100}%`;
+                flower.style.top = `${Math.random() * 100}%`;
+                
+                // Random size
+                const size = Math.random() * 1.5 + 1;
+                flower.style.fontSize = `${size}rem`;
+                
+                // Random animation
+                const duration = Math.random() * 10 + 10;
+                const delay = Math.random() * 5;
+                flower.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                
+                flowersContainer.appendChild(flower);
+            }
+        }
+        
+        // Open the envelope
+        function openEnvelope() {
+            envelope.classList.add('opened');
+            instruction.textContent = "Your love letter is open! Read it carefully.";
+            
+            // Play a subtle sound if available
+            try {
+                const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-page-turn-single-1106.mp3');
+                audio.volume = 0.3;
+                audio.play();
+            } catch (e) {
+                console.log("Sound effect couldn't be played");
+            }
+        }
+        
+        // Close the envelope
+        function closeEnvelope() {
+            envelope.classList.remove('opened');
+            instruction.textContent = "Click the envelope to open your love letter";
+        }
+        
+        // Toggle background music
+        let musicPlaying = false;
+        function toggleMusic() {
+            if (musicPlaying) {
+                backgroundMusic.pause();
+                musicBtn.innerHTML = '<i class="fas fa-music"></i> Play Music';
+            } else {
+                backgroundMusic.play().catch(e => {
+                    console.log("Autoplay prevented. Please click the button to play music.");
+                    // If autoplay is prevented, change button text
+                    musicBtn.innerHTML = '<i class="fas fa-music"></i> Click to Play';
+                });
+                musicBtn.innerHTML = '<i class="fas fa-volume-up"></i> Pause Music';
+            }
+            musicPlaying = !musicPlaying;
+        }
+        
+        // Event listeners
+        envelopeContainer.addEventListener('click', openEnvelope);
+        openBtn.addEventListener('click', openEnvelope);
+        closeBtn.addEventListener('click', closeEnvelope);
+        musicBtn.addEventListener('click', toggleMusic);
+        
+        // Initialize
+        createFlowers();
+        
+        // Add a romantic message in console
+        console.log("%c💖 For someone special 💖", "color: #e84393; font-size: 18px; font-weight: bold;");
+        console.log("%cThis letter was created with love and code.", "color: #8a5568; font-size: 14px;");
+    </script>
 </body>
 </html>
